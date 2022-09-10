@@ -1,12 +1,12 @@
-[submodule "lib/imgui"]
-	path = lib/imgui
-	url = https://github.com/ocornut/imgui.git
-[submodule "lib/glfw"]
-	path = lib/glfw
-	url = https://github.com/glfw/glfw.git
-[submodule "lib/glm"]
-	path = lib/glm
-	url = https://github.com/g-truc/glm.git
 [submodule "lib/freetype"]
 	path = lib/freetype
-	url = https://github.com/freetype/freetype.git
+	url = https://github.com/freetype/freetype
+[submodule "lib/glfw"]
+	path = lib/glfw
+	url = https://github.com/glfw/glfw
+[submodule "lib/glm"]
+	path = lib/glm
+	url = https://github.com/g-truc/glm
+[submodule "lib/imgui"]
+	path = lib/imgui
+	url = https://github.com/ocornut/imgui
