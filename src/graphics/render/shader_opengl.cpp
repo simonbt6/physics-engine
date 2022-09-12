@@ -16,7 +16,7 @@ static std::string readFile(const std::string& filepath)
 
     if (!stream.is_open())
     {
-        std::cerr << "Counld not read file" << filepath << ". File does not exist." << std::endl;
+        Util::Log::Warn(std::format("Could not read file {}. File does not exist."));
         return "";
     }
 
@@ -46,8 +46,6 @@ uint32_t CompileProgram(const std::string& vert_src, const std::string& frag_src
 
     GLchar* err_buff;
 
-    std::cout << "\nCompiling vertex shader." << std::endl;
-
     glShaderSource(vert_shader, 1, &c_vert_src, 0);
     glCompileShader(vert_shader);
 
@@ -58,12 +56,10 @@ uint32_t CompileProgram(const std::string& vert_src, const std::string& frag_src
     {
         err_buff = new GLchar[log_length];
         glGetShaderInfoLog(vert_shader, log_length, 0, err_buff);
-        std::cout << "\nVertex shader error buffer: " << err_buff << std::endl;
+        Util::Log::Error(std::format("Vertex shader error buffer: {}.", err_buff));
         log_length = 0;
         delete[] err_buff;
     }
-
-    std::cout << "\nCompiling fragment shader." << std::endl;
 
     glShaderSource(frag_shader, 1, &c_frag_src, 0);
     glCompileShader(frag_shader);
@@ -75,13 +71,11 @@ uint32_t CompileProgram(const std::string& vert_src, const std::string& frag_src
     {
         err_buff = new GLchar[log_length];
         glGetShaderInfoLog(frag_shader, log_length, 0, err_buff);
-        std::cout << "\nFragment shader error buffer: " << err_buff << std::endl;
+        Util::Log::Error(std::format("Fragment shader error buffer: {}.", err_buff));
         log_length = 0;
         delete[] err_buff;
     }
 
-
-    std::cout << "\nLinking program." << std::endl;
     m_Program = glCreateProgram();
     glAttachShader(m_Program, vert_shader);
     glAttachShader(m_Program, frag_shader);
@@ -94,7 +88,7 @@ uint32_t CompileProgram(const std::string& vert_src, const std::string& frag_src
     {
         err_buff = new GLchar[log_length];
         glGetProgramInfoLog(m_Program, log_length, 0, err_buff);
-        std::cout << "\nProgram error buffer: " << err_buff << std::endl;
+        Util::Log::Error(std::format("Program link error buffer: {}.", err_buff));
         log_length = 0;
         delete[] err_buff;
         // exit(1);
@@ -106,14 +100,15 @@ uint32_t CompileProgram(const std::string& vert_src, const std::string& frag_src
     // Validate program.
     glValidateProgram(m_Program);
     glGetProgramiv(m_Program, GL_VALIDATE_STATUS, &result);
-    std::cout << "\nProgram validate: " << ((result == GL_TRUE) ? "true" : "false") << "." << std::endl;
+    if (result != GL_TRUE)
+        Util::Log::Error(std::format("Program failed to validate."));
 
     glGetProgramiv(m_Program, GL_INFO_LOG_LENGTH, &log_length);
     if (log_length > 0)
     {
         err_buff = new GLchar[log_length];
         glGetProgramInfoLog(m_Program, log_length, 0, err_buff);
-        std::cout << "\nProgram validate error buffer: " << err_buff << std::endl;
+        Util::Log::Error(std::format("Program validate error buffer: {}.", err_buff));
         log_length = 0;
         delete[] err_buff;
         // exit(1);
@@ -133,14 +128,14 @@ Shader::Shader(const std::string& name, const std::string& path)
     std::string vert_src = readFile(vert_path.string());
     std::string frag_src = readFile(frag_path.string());
 
-    printf("\nCompiling %s program.\n", name.c_str());
+    Util::Log::Info(std::format("Compiling {} shader program.", name));
     m_Program = CompileProgram(vert_src, frag_src);
 }
 
 Shader::Shader(const std::string& name, const std::string& vert_src, const std::string& frag_src)
 :m_Name(name)
 {
-    printf("\nCompiling %s program.\n", name.c_str());
+    Util::Log::Info(std::format("Compiling {} shader program.", name));
     m_Program = CompileProgram(vert_src, frag_src);
 }
 

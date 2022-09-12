@@ -5,8 +5,11 @@
 #include <string>
 #include <inttypes.h>
 #include <vector>
+#include <format>
 
 #include <glm/glm.hpp>
+
+#include "util/log.hpp"
 
 #define BIT(x) (1 << x)
 
