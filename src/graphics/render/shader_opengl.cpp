@@ -16,7 +16,7 @@ static std::string readFile(const std::string& filepath)
 
     if (!stream.is_open())
     {
-        Util::Log::Warn(std::format("Could not read file {}. File does not exist."));
+        Util::Log::Warn(std::format("Could not read file {}. File does not exist.", filepath));
         return "";
     }
 
