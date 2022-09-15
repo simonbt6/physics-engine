@@ -3,6 +3,7 @@
 #include "../../def.hpp"
 
 #include <glad/glad.h>
+#include <opencv2/opencv.hpp>
 
 namespace Graphics
 {
@@ -18,6 +19,7 @@ namespace Graphics
             GLenum m_InternalFormat, m_DataFormat;
 
         public:
+            Texture(cv::Mat& frame);
             Texture(uint32_t width, uint32_t height);
             Texture(const std::string& path);
 

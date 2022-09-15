@@ -5,6 +5,28 @@
 
 using namespace Graphics::Render;
 
+Texture::Texture(cv::Mat& frame)
+{
+    m_Width = frame.cols;
+    m_Height = frame.rows;
+    m_InternalFormat = GL_RGB;
+    m_DataFormat = frame.channels() == 1 ? GL_LUMINANCE : GL_BGR;
+
+    cv::flip(frame, frame, 0);
+
+    glGenTextures(1, &m_RenderID);
+    glBindTexture(GL_TEXTURE_2D, m_RenderID);
+
+    glTextureParameteri(m_RenderID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTextureParameteri(m_RenderID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glTextureParameteri(m_RenderID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTextureParameteri(m_RenderID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, m_InternalFormat, m_Width, m_Height, 0, m_DataFormat, GL_UNSIGNED_BYTE, frame.ptr());
+
+}
+
 Texture::Texture(uint32_t width, uint32_t height)
     :m_Width(width), m_Height(height)
 {
@@ -66,7 +88,7 @@ Texture::Texture(const std::string& path)
 
 Texture::~Texture()
 {
-    glDeleteTextures(1, &m_RenderID);
+    // glDeleteTextures(1, &m_RenderID);
 }
 
 uint32_t Texture::getWidth() const

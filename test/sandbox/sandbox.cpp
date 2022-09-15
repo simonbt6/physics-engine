@@ -1,4 +1,4 @@
-
+#include <iostream>
 #include "../../src/graphics/window.hpp"
 #include "../../src/graphics/context.hpp"
 
@@ -6,6 +6,7 @@
 
 int main()
 {
+    printf("\nHello");
     ref<Graphics::Context> ctx = Graphics::Context::GetInstance();
     Graphics::Window* window = new Graphics::Window();
     // Graphics::Window* window2 = new Graphics::Window();

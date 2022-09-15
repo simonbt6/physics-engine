@@ -10,6 +10,7 @@
 #include <glm/glm.hpp>
 
 #include "util/log.hpp"
+#include "video/decoder.hpp"
 
 #define BIT(x) (1 << x)
 
