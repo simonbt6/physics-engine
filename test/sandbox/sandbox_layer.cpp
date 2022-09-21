@@ -30,7 +30,7 @@ namespace Test
     {
         m_Window = window;
 
-        shader = CreateRef<Render::Shader>("test", "D:/dev-repo/PhysicsEngine/test/sandbox/shaders/");
+        shader = CreateRef<Render::Shader>("test", "assets/shaders/");
 
         vao = CreateRef<Render::VertexArray>();
         vbo = CreateRef<Render::VertexBuffer>(vertices, sizeof(vertices));
@@ -43,7 +43,7 @@ namespace Test
         vao->addVertexBuffer(vbo);
         vao->setIndexBuffer(ibo);
 
-        decoder = CreateRef<Engine::Video::Decoder>("C:/Users/simon/Videos/demo.mp4");
+        decoder = CreateRef<Engine::Video::Decoder>("assets/videos/demo.mp4");
 
     }
 

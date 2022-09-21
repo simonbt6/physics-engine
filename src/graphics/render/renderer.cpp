@@ -144,7 +144,7 @@ void Renderer::init()
     for (uint32_t i = 0; i < MAX_TEXTURE_SLOTS; i++)
         samplers[i] = i;
 
-    sceneData.quad_shader = CreateRef<Shader>("quad", "shader/");
+    sceneData.quad_shader = CreateRef<Shader>("quad", "assets/shaders/");
     // sceneData.circle_shader = CreateRef<Shader>("circle", "shader/");
     // sceneData.line_shader   = CreateRef<Shader>("line", "shader/");
 

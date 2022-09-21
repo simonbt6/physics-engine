@@ -33,6 +33,9 @@ add_executable(SandboxTest test/sandbox/sandbox.cpp ${_PROJECT_SOURCES} ${_SANDB
 target_include_directories(SandboxTest PUBLIC ${STB_PATH} ${IMGUI_PATH} ${GLM_PATH} ${GLFW_PATH} ${GLFW_PATH}/include ${GLAD_PATH}/include ${OpenCV_INCLUDE_DIRS})
 target_link_libraries(SandboxTest glm glfw ${OpenCV_LIBS})
 
+file(COPY src/graphics/assets DESTINATION ${EXECUTABLE_OUTPUT_PATH})
+file(COPY test/sandbox/assets DESTINATION ${EXECUTABLE_OUTPUT_PATH})
+
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
