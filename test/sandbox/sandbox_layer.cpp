@@ -45,6 +45,10 @@ namespace Test
 
         decoder = CreateRef<Engine::Video::Decoder>("assets/videos/demo.mp4");
 
+        Window* _window = (Window*)glfwGetWindowUserPointer(m_Window);
+        _window->getGUI()->dockWindow("Object Transform", DockPosition::BOTTOM);
+        _window->getGUI()->dockWindow("Projection settings", DockPosition::RIGHT);
+        _window->getGUI()->dockWindow("Graphic view", DockPosition::CENTER);
     }
 
     void SandboxLayer::onDetach() 
@@ -80,12 +84,26 @@ namespace Test
                      rotate_y = 0.0f,
                      rotate_z = 0.0f;
 
-        static bool show_demo_window = true;
-        static bool show_view_projection_window = true;
-        static bool show_transform_window = true;
+        static bool show_view_projection_window = false;
+        static bool show_transform_window = false;
 
-        // if (show_demo_window)
-        //     ImGui::ShowDemoWindow(&show_demo_window);
+
+        if (ImGui::BeginMainMenuBar())
+        {
+            if (ImGui::BeginMenu("Tools"))
+            {
+                if (ImGui::MenuItem("Projection settings"))
+                {
+                    show_view_projection_window ^= true;
+                }
+                if (ImGui::MenuItem("Object transform"))
+                {
+                    show_transform_window ^= true;
+                }
+                ImGui::EndMenu();
+            }
+            ImGui::EndMainMenuBar();
+        }
 
         if (show_view_projection_window)
         {
@@ -99,9 +117,10 @@ namespace Test
             ImGui::SliderAngle("FOV", &fov, 0.0f, 180.0f);
             ImGui::End();
         }
+
         if (show_transform_window)
         {
-            ImGui::Begin("Object transform", &show_view_projection_window);
+            ImGui::Begin("Object Transform", &show_transform_window);
             ImGui::Text("Translate");
             ImGui::SliderFloat("X##pos", &pos_x, left, right);
             ImGui::SliderFloat("Y##pos", &pos_y, bottom, top);
@@ -118,6 +137,7 @@ namespace Test
             ImGui::SliderAngle("Z##rot", &rotate_z, 0.0f, 360.0f);
             ImGui::End();
         }
+
         // Render::Renderer::begin(glm::perspective(glm::radians(fov), ((float)right)/((float)top), near, far));
         Render::Renderer::begin(glm::ortho(left, right, bottom, top, near, far));
         // Render::Renderer::begin(glm::mat4(1.0f));
@@ -129,9 +149,12 @@ namespace Test
         shader->bind();
         shader->setFloat3("u_Color", glm::vec3{1.0f, 0.0f, 0.0f});
 
+        pos_x = right / 2;
+        pos_y = top / 2;
+
         glm::mat4 transform(1.0f);
         transform = glm::translate(transform, glm::vec3(pos_x, pos_y, -pos_z));
-        transform = glm::scale(transform, glm::vec3(scale_x, scale_y, scale_z));
+        transform = glm::scale(transform, glm::vec3(scale_x, scale_x * top / right, scale_z));
         transform = glm::rotate(transform, glm::radians(rotate_x), glm::vec3(1.0f, 0.0f, 0.0f));
         transform = glm::rotate(transform, glm::radians(rotate_y), glm::vec3(0.0f, 1.0f, 0.0f));
         transform = glm::rotate(transform, glm::radians(rotate_z), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -140,11 +163,29 @@ namespace Test
         decoder->nextFrame(frame);
         ref<Render::Texture> texture = CreateRef<Render::Texture>(frame);
 
-        Render::Renderer::drawQuad(transform, texture);
-        // Render::Renderer::drawQuad(glm::vec3(100.0f, 100.0f, -5.0f), 0.0f, glm::vec2(100.0f, 200.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+        {
+            ImGui::Begin("Graphic view");
 
-        // Render::Renderer::submit(shader, vao, transform);
-        // _sleep(1000.0f/decoder->getFrequency());
+            ImVec2 wsize = ImGui::GetWindowSize();
+            float ratio = (float)texture->getWidth() / (float)texture->getHeight();
+            float _width = 0, _height = 0;
+
+            if ((wsize.x / ratio) > wsize.y)
+            {
+                _width = wsize.y * ratio;
+                _height = wsize.y;
+            }else {
+                _width = wsize.x;
+                _height = wsize.x / ratio;   
+            }
+            
+            ImGui::SetCursorPosX((ImGui::GetWindowWidth() - _width) / 2.0f);
+            ImGui::SetCursorPosY((ImGui::GetWindowHeight() - _height) / 2.0f);
+            
+            ImGui::Image((void*)(intptr_t)texture->getRenderID(), ImVec2(_width, _height));
+            
+            ImGui::End();
+        }
 
         Render::Renderer::end();
     }

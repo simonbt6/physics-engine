@@ -12,6 +12,7 @@
 #include "render/shader.hpp"
 #include "render/texture.hpp"
 
+#include "render/buffer/frame_buffer.hpp"
 #include "render/buffer/buffer_layout.hpp"
 #include "render/buffer/index_buffer.hpp"
 #include "render/buffer/uniform_buffer.hpp"

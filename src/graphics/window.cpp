@@ -18,8 +18,8 @@ namespace Graphics {
         : m_IsRunning(false), m_GUI(new GUI()) 
     {
         Context::GetInstance();
-
-        m_Window = glfwCreateWindow(m_Width, m_Height, "Test GLFW/GLAD", NULL, NULL);
+        glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
+        m_Window = glfwCreateWindow(m_Width, m_Height, "Test GLFW/GLAD", 0, NULL);
 
         if (!m_Window) 
         {
@@ -32,6 +32,7 @@ namespace Graphics {
         glfwSwapInterval(1);
 
         glfwSetWindowUserPointer(m_Window, this);
+        glfwSetFramebufferSizeCallback(m_Window, framebuffer_size_callback);
 
         Render::Renderer::init();
 
@@ -52,6 +53,11 @@ namespace Graphics {
         glfwDestroyWindow(m_Window);
         glfwTerminate();
     }
+    void Window::framebuffer_size_callback(GLFWwindow* window, int width, int height)
+    {
+        glViewport(0, 0, width, height);
+    }
+
 
     void Window::onUpdate()
     {
@@ -71,12 +77,17 @@ namespace Graphics {
             layer->onUpdate();
 
         glfwGetFramebufferSize(m_Window, &m_Width, &m_Height);
-        glViewport(0, 0, m_Width, m_Height);
       
         m_GUI->end();
 
         glfwSwapBuffers(m_Window);
     }
+
+    void Window::setFullScreen(bool value)
+    {
+        glfwMaximizeWindow(m_Window);
+    }
+    
 
     void Window::PushLayer(Layer* layer)
     {

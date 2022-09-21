@@ -12,7 +12,7 @@ Texture::Texture(cv::Mat& frame)
     m_InternalFormat = GL_RGB;
     m_DataFormat = frame.channels() == 1 ? GL_LUMINANCE : GL_BGR;
 
-    cv::flip(frame, frame, 0);
+    // cv::flip(frame, frame, 0);
 
     glGenTextures(1, &m_RenderID);
     glBindTexture(GL_TEXTURE_2D, m_RenderID);

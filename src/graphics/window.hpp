@@ -29,6 +29,7 @@ namespace Graphics
         void stop();
 
         inline bool IsRunning() const { return m_IsRunning; }
+        inline GUI* getGUI() const { return m_GUI; }
 
         void onAttach();
         void onDetach();
@@ -36,6 +37,11 @@ namespace Graphics
         void onUpdate();
         void onEvent();
 
+        void setFullScreen(bool value);
+
         void PushLayer(Layer* layer);
+
+    private:
+        static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
     };
 }

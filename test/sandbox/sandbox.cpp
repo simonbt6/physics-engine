@@ -6,9 +6,9 @@
 
 int main()
 {
-    printf("\nHello");
     ref<Graphics::Context> ctx = Graphics::Context::GetInstance();
     Graphics::Window* window = new Graphics::Window();
+    // window->setFullScreen(true);
     // Graphics::Window* window2 = new Graphics::Window();
     window->PushLayer(new Test::SandboxLayer());
     

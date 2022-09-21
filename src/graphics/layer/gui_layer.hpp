@@ -1,14 +1,21 @@
 #pragma once
 
 #include "layer.hpp"
+#include <unordered_map>
 
 namespace Graphics
 {
+    enum class DockPosition
+    {
+        TOP, BOTTOM,
+        LEFT, RIGHT,
+        CENTER
+    };
+
     class GUI : public Layer
     {
     private:
-        bool show_demo_window = true;
-        bool show_another_window = true;
+        std::unordered_map<std::string, DockPosition> m_DockQueue;
         
     public:
         virtual void onAttach(GLFWwindow*) override;
@@ -16,7 +23,12 @@ namespace Graphics
         virtual void onEvent() override;
         virtual void onUpdate() override;
 
+        virtual void dockWindow(const std::string& window, DockPosition position);
+
         void begin();
         void end();
+
+    private:
+        void _resetDocking();
     };
 };
