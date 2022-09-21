@@ -29,7 +29,7 @@ namespace Engine
             inline int32_t getWidth() const { return m_Width; }
             inline int32_t getHeight() const { return m_Height; }
 
-            inline int32_t getFrequency() const { return m_Capture.get(cv::CAP_PROP_FPS); }
+            inline int32_t getFrequency() const { return (int32_t) m_Capture.get(cv::CAP_PROP_FPS); }
         };
     };
 };
