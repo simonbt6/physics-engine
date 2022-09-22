@@ -56,20 +56,20 @@ namespace Graphics
 
     public:
         Framebuffer(const FramebufferSpecification& spec);
-        virtual ~Framebuffer() = default;
+        virtual ~Framebuffer();
 
         void invalidate();
 
-        virtual void bind();
-        virtual void unbind();
+        virtual void bind() = 0;
+        virtual void unbind() = 0;
 
-        virtual void resize(uint32_t width, uint32_t height);
-        virtual int readPixel(uint32_t index, int value);
+        virtual void resize(uint32_t width, uint32_t height) = 0;
+        virtual int readPixel(uint32_t index, int value) = 0;
 
-        virtual void clearAttachment(uint32_t index, int value);
+        virtual void clearAttachment(uint32_t index, int value) = 0;
 
-        virtual uint32_t getColorAttachmentRenderID(uint32_t index = 0) const;    
+        virtual uint32_t getColorAttachmentRenderID(uint32_t index = 0) const = 0;    
 
-        virtual const FramebufferSpecification& getSpecification() const;
+        virtual const FramebufferSpecification& getSpecification() const = 0;
     };
 };
